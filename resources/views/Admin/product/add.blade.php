@@ -75,7 +75,7 @@
 
 @section('js')
 <script>
-   $(document).on('click','#send',function (e){
+   $(document).off('click').on('click','#send',function (e){
         e.preventDefault();
         var form = new FormData($('#ajaxform')[0]);
         $.ajax({

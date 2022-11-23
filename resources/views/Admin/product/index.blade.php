@@ -6,7 +6,19 @@
         <a style="color: white;text-decoration: none" href="{{route('product.show','test')}}">
             Add {{\Illuminate\Support\Facades\Request::segment(2)}}
         </a>
+    </button>
 
+    {{--<button type="button" style="margin-bottom: 10px" class="btn btn-secondary">
+        <a style="color: white;text-decoration: none" href="{{route('import')}}">
+           Import Excel
+        </a>
+    </button>--}}
+    <button  class="btn btn-secondary" style="margin-bottom: 10px" data-bs-toggle="modal" data-bs-target="#Import">Import Excel</button>
+    @include('Admin.product.excel')
+    <button type="button" style="margin-bottom: 10px" class="btn btn-success">
+        <a style="color: white;text-decoration: none" href="{{route('export')}}">
+            Export Excel
+        </a>
     </button>
     <!-- Modal -->
 
@@ -42,6 +54,7 @@
                     <td>
                         <button  class="btn  btn-danger" data-bs-toggle="modal" data-bs-target="#Delete{{$product->id}}">Delete</button>
                         <button class="btn  btn-success"><a href="{{route('product.edit',$product->id)}}" style="text-decoration: none;color: white">Edit</a> </button>
+                        <button class="btn  btn-primary"><a href="{{route('show-images',$product->id)}}" style="text-decoration: none;color: white">Show</a> </button>
                     </td>
                 </tr>
 

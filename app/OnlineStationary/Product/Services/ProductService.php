@@ -5,7 +5,11 @@ namespace OnlineStationary\Product\Services;
 
 
 
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use OnlineStationary\Category\Models\Category;
+use OnlineStationary\Product\Exports\ExportProduct;
+use OnlineStationary\Product\Imports\ImportProduct;
 use OnlineStationary\Product\Models\Image;
 use OnlineStationary\Product\Models\Product;
 
@@ -32,6 +36,7 @@ class ProductService
                 'details' => $request->product_details,
                 'price' => $request->product_price,
                 'quantity' => $request->product_quantity,
+                 'category_id'=>$request->category
             ]);
 
            /*      $product = new Product();
@@ -72,6 +77,7 @@ class ProductService
             $product->details = $request->product_details;
             $product->price = $request->product_price;
             $product->quantity = $request->product_quantity;
+            $product->category_id = $request->category;
             $product->save();
 
             if (!empty($request->images)) {
@@ -81,11 +87,9 @@ class ProductService
             }
 
             $this->saveImage($request->images, $product->id);
-            //return $request;
             return redirect()->route('product.index');
         }catch (\Exception $e)
         {
-            //return redirect()->route('product.index');
             return redirect()->back();
 
         }
@@ -101,6 +105,40 @@ class ProductService
         $this->deleteImageFromSource($image,$product->id);
         $product->delete();
         return redirect()->route('product.index');
+    }
+
+    public function import($request)
+    {
+        if($request->hasFile('file')) {
+            $excel = Excel::import(new ImportProduct,$request->file);
+            return redirect()->route('product.index');
+        }
+        else
+            return redirect()->route('product.index');
+    }
+    public function export()
+    {
+        return Excel::download(new ExportProduct(),'product.xlsx');
+    }
+
+    public function ShowImages($id)
+    {
+        $product = Product::with('images')->findOrFail($id);
+        //$img = $product->images[0]->toArray();
+       // return $product->images[0]->toArray();
+        /*return $img['name'];
+        foreach ($product->images as $key => $value)
+            return $key . $value;*/
+        return view('Admin.product.show',compact('product'));
+
+        /*echo $image;
+        echo '<br><br>';
+        foreach ($image as $images)
+            echo $images;
+            return $images->name;*/
+       // return response()->json($product);
+       //return $product;
+
     }
 
     private function saveImage($images,$product_id)

@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
 Auth::routes(['register'=>false]);
 
@@ -28,6 +28,12 @@ Route::group(['prefix'=>'controlled','middleware'=>['auth','Admin'],'namespace'=
     Route::get('/',function (){return view('Admin.main');});
     Route::resource('category','CategoryController');
     Route::resource('product','ProductController');
+
+    Route::get('/show-images/{id}','ProductController@ShowImage')->name('show-images');
+    Route::get('/file-import','ProductController@importView')->name('import-view');
+    Route::post('/import','ProductController@import')->name('import');
+    Route::get('/export','ProductController@export')->name('export');
+
     Route::resource('filter','FilterController');
     Route::resource('sub_filter','SubFilterController');
 });
@@ -46,3 +52,10 @@ Route::group(['prefix'=>'role','middleware' => ['auth'],'namespace'=>'Controllin
 
     //Route::resource('products', ProductController::class);
 });
+
+
+Route::view('/', 'chat')->middleware('auth');
+Route::resource('messages', 'MessageController')->only([
+    'index',
+    'store'
+]);

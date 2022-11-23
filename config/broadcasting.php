@@ -39,6 +39,10 @@ return [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => true,
             ],
+            'larasocket' => [
+                'driver' => 'larasocket',
+                'token' => env('LARASOCKET_TOKEN'),
+            ],
         ],
 
         'ably' => [
